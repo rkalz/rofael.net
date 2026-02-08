@@ -1,6 +1,470 @@
-<title>rofael.net</title>
-<p>rofael.net</p>
-<!-- <p><a href="webdev/hbtest.html">hbtest.html</a></p>
-<p><a href="webdev/hb.html">hb.html</a></p>
-<p><a href="webdev/scrolltest.html">scrolltest.html</a></p>
-<p><a href="projects/mlreddit/query.html">Title to Subreddit API frontend</a></p> -->
+<!doctype html>
+<html lang="en">
+    <head>
+        <meta charset="UTF-8" />
+        <meta
+            name="viewport"
+            content="width=device-width, initial-scale=1, viewport-fit=cover"
+        />
+        <meta name="color-scheme" content="light dark" />
+        <title>Rofnet — AS402164</title>
+        <meta
+            name="description"
+            content="Rofnet (AS402164) — homelab ASN. Contact info, status, and routing notes."
+        />
+
+        <link rel="stylesheet" href="./styles.css" />
+    </head>
+
+    <body>
+        <a class="skip-link" href="#content">Skip to content</a>
+
+        <header class="site-header">
+            <div class="container">
+                <div class="brand">
+                    <div class="brand__mark" aria-hidden="true">AS</div>
+                    <div class="brand__text">
+                        <div class="brand__title">Rofnet</div>
+                        <div class="brand__subtitle">AS402164</div>
+                    </div>
+                </div>
+
+                <nav class="nav" aria-label="Primary">
+                    <a href="#about">About</a>
+                    <a href="#routing">Routing</a>
+                    <a href="#security">Security</a>
+                    <a href="#status">Status</a>
+                    <a href="#contact">Contact</a>
+                </nav>
+            </div>
+        </header>
+
+        <main id="content">
+            <section class="hero">
+                <div class="container hero__grid">
+                    <div>
+                        <h1>Rofnet (AS402164)</h1>
+                        <p class="lead">
+                            Personal homelab ASN used for learning and
+                            experimentation (BGP, IP, routing policy, and
+                            self-hosted services). Not a commercial network and
+                            no SLA.
+                        </p>
+
+                        <div class="cta-row">
+                            <a class="button" href="#contact">Contact</a>
+                            <a class="button button--secondary" href="#routing">
+                                Routing notes
+                            </a>
+                        </div>
+
+                        <ul class="quick-facts" aria-label="Quick facts">
+                            <li><strong>ASN:</strong> 402164</li>
+                            <li><strong>IPv6:</strong> 2620:5a:d000::/48</li>
+                            <li>
+                                <strong>Upstream:</strong> Neptune Networks
+                                (AS21700) — NYC
+                            </li>
+                            <li>
+                                <strong>IPv4:</strong>
+                                <span class="muted">Pending ARIN waitlist</span>
+                            </li>
+                            <li>
+                                <strong>PeeringDB:</strong>
+                                <a
+                                    href="https://www.peeringdb.com/net/41458"
+                                    rel="noopener noreferrer"
+                                    target="_blank"
+                                    >net/41458</a
+                                >
+                            </li>
+                            <li>
+                                <strong>RPKI:</strong>
+                                <a
+                                    href="https://stat.ripe.net/2620:5a:d000::/48"
+                                    rel="noopener noreferrer"
+                                    target="_blank"
+                                    >Visible on RIPEstat</a
+                                >
+                            </li>
+                            <li>
+                                <strong>IRR:</strong>
+                                <a
+                                    href="https://irrexplorer.nlnog.net/prefix/2620:5a:d000::/48"
+                                    rel="noopener noreferrer"
+                                    target="_blank"
+                                    >View route objects</a
+                                >
+                            </li>
+                        </ul>
+                    </div>
+
+                    <aside class="card">
+                        <h2 class="card__title">At a glance</h2>
+                        <dl class="dl">
+                            <div class="dl__row">
+                                <dt>Type</dt>
+                                <dd>Homelab / experimental</dd>
+                            </div>
+                            <div class="dl__row">
+                                <dt>Transit</dt>
+                                <dd>No (single upstream)</dd>
+                            </div>
+                            <div class="dl__row">
+                                <dt>Peering</dt>
+                                <dd>
+                                    See
+                                    <a
+                                        href="https://www.peeringdb.com/net/41458"
+                                        rel="noopener noreferrer"
+                                        target="_blank"
+                                        >PeeringDB</a
+                                    >
+                                </dd>
+                            </div>
+                            <div class="dl__row">
+                                <dt>RPKI</dt>
+                                <dd>
+                                    Enabled (ROAs published) —
+                                    <a
+                                        href="https://stat.ripe.net/2620:5a:d000::/48"
+                                        rel="noopener noreferrer"
+                                        target="_blank"
+                                        >RIPEstat</a
+                                    >
+                                </dd>
+                            </div>
+                            <div class="dl__row">
+                                <dt>IRR</dt>
+                                <dd>
+                                    Route objects visible via
+                                    <a
+                                        href="https://irrexplorer.nlnog.net/prefix/2620:5a:d000::/48"
+                                        rel="noopener noreferrer"
+                                        target="_blank"
+                                        >IRR Explorer</a
+                                    >
+                                </dd>
+                            </div>
+                        </dl>
+                    </aside>
+                </div>
+            </section>
+
+            <section id="about" class="section">
+                <div class="container">
+                    <h2>About</h2>
+                    <p>
+                        Rofnet (AS402164) is a personal homelab network used to
+                        experiment with IP routing, BGP announcements, and basic
+                        network operations. Outages and maintenance may occur
+                        without notice.
+                    </p>
+
+                    <div class="grid-3">
+                        <div class="card">
+                            <h3>Goals</h3>
+                            <p class="muted">
+                                Learn by doing: BGP policy, filtering,
+                                monitoring, and safe operations.
+                            </p>
+                        </div>
+                        <div class="card">
+                            <h3>Scope</h3>
+                            <p class="muted">
+                                Single upstream (Neptune Networks, AS21700 —
+                                NYC). No transit offered.
+                            </p>
+                        </div>
+                        <div class="card">
+                            <h3>Services</h3>
+                            <p class="muted">
+                                Self-hosted services and labs (details
+                                intentionally minimal).
+                            </p>
+                        </div>
+                    </div>
+                </div>
+            </section>
+
+            <section id="routing" class="section">
+                <div class="container">
+                    <h2>Routing notes</h2>
+
+                    <div class="grid-2">
+                        <div class="card">
+                            <h3>Upstream</h3>
+                            <ul class="list">
+                                <li>
+                                    <strong>Provider:</strong> Neptune Networks
+                                </li>
+                                <li><strong>ASN:</strong> AS21700</li>
+                                <li><strong>Location:</strong> NYC</li>
+                            </ul>
+                        </div>
+
+                        <div class="card">
+                            <h3>Announcements</h3>
+                            <ul class="list">
+                                <li>
+                                    <strong>IPv6:</strong> 2620:5a:d000::/48
+                                </li>
+                                <li><strong>IPv4:</strong> none</li>
+                            </ul>
+                        </div>
+                    </div>
+
+                    <div class="card card--flat">
+                        <h3>Policy (informal)</h3>
+                        <ul class="list">
+                            <li>Best-effort only; no guarantees.</li>
+                            <li>No transit or downstream customers.</li>
+                            <li>
+                                Filtering/security: RPKI (ROAs) + IRR-based
+                                hygiene.
+                            </li>
+                            <li>
+                                See
+                                <a
+                                    href="https://www.peeringdb.com/net/41458"
+                                    rel="noopener noreferrer"
+                                    target="_blank"
+                                    >PeeringDB</a
+                                >
+                                for peering/contact details that need to stay
+                                current.
+                            </li>
+                        </ul>
+
+                        <pre class="mono"><code>
+Rofnet (AS402164)
+  - Upstream: AS21700 (Neptune Networks) — NYC
+  - IPv6: 2620:5a:d000::/48
+  - IPv4: none
+  - RPKI: enabled (ROAs published)
+  - IRR: route objects present (ARIN IRR) — see IRR Explorer
+  - PeeringDB: https://www.peeringdb.com/net/41458
+            </code></pre>
+                    </div>
+                </div>
+            </section>
+
+            <section id="security" class="section">
+                <div class="container">
+                    <h2>Registry & routing security</h2>
+                    <p class="muted">
+                        Public references for registration, IRR objects, and
+                        RPKI visibility.
+                    </p>
+
+                    <div class="grid-2">
+                        <div class="card">
+                            <h3>RPKI (ROAs)</h3>
+                            <ul class="list">
+                                <li>
+                                    RIPEstat (prefix):
+                                    <a
+                                        href="https://stat.ripe.net/2620:5a:d000::/48"
+                                        rel="noopener noreferrer"
+                                        target="_blank"
+                                        >2620:5a:d000::/48</a
+                                    >
+                                </li>
+                                <li>
+                                    RIPEstat (ASN):
+                                    <a
+                                        href="https://stat.ripe.net/AS402164"
+                                        rel="noopener noreferrer"
+                                        target="_blank"
+                                        >AS402164</a
+                                    >
+                                </li>
+                            </ul>
+                        </div>
+
+                        <div class="card">
+                            <h3>IRR (route/route6 objects)</h3>
+                            <ul class="list">
+                                <li>
+                                    IRR Explorer (prefix):
+                                    <a
+                                        href="https://irrexplorer.nlnog.net/prefix/2620:5a:d000::/48"
+                                        rel="noopener noreferrer"
+                                        target="_blank"
+                                        >2620:5a:d000::/48</a
+                                    >
+                                </li>
+                                <li>
+                                    IRR Explorer (ASN):
+                                    <a
+                                        href="https://irrexplorer.nlnog.net/asn/402164"
+                                        rel="noopener noreferrer"
+                                        target="_blank"
+                                        >AS402164</a
+                                    >
+                                </li>
+                                <li class="muted">
+                                    Raw ARIN whois (port 43):
+                                    <code
+                                        >whois -h rr.arin.net
+                                        2620:5a:d000::/48</code
+                                    >
+                                </li>
+                            </ul>
+                        </div>
+                    </div>
+
+                    <div class="card card--flat">
+                        <h3>ARIN registration (RDAP)</h3>
+                        <ul class="list">
+                            <li>
+                                ASN registration:
+                                <a
+                                    href="https://rdap.arin.net/registry/autnum/402164"
+                                    rel="noopener noreferrer"
+                                    target="_blank"
+                                    >rdap.arin.net/registry/autnum/402164</a
+                                >
+                            </li>
+                            <li>
+                                Prefix registration:
+                                <a
+                                    href="https://rdap.arin.net/registry/ip/2620:5a:d000::/48"
+                                    rel="noopener noreferrer"
+                                    target="_blank"
+                                    >rdap.arin.net/registry/ip/2620:5a:d000::/48</a
+                                >
+                            </li>
+                        </ul>
+                    </div>
+                </div>
+            </section>
+
+            <section id="status" class="section">
+                <div class="container">
+                    <h2>Status</h2>
+                    <p class="muted">
+                        Manual status for now. Monitoring/status tooling may be
+                        added later.
+                    </p>
+
+                    <div class="grid-2">
+                        <div class="card">
+                            <h3>Current</h3>
+                            <ul class="list">
+                                <li>
+                                    <strong>Routing:</strong>
+                                    <span class="pill pill--ok">OK</span>
+                                    <span class="muted">(manual)</span>
+                                </li>
+                                <li>
+                                    <strong>Connectivity:</strong>
+                                    <span class="pill pill--ok">OK</span>
+                                    <span class="muted">(manual)</span>
+                                </li>
+                                <li>
+                                    <strong>Maintenance:</strong>
+                                    <span class="pill">None announced</span>
+                                </li>
+                            </ul>
+                        </div>
+
+                        <div class="card">
+                            <h3>Links</h3>
+                            <ul class="list">
+                                <li>
+                                    <a
+                                        href="https://www.peeringdb.com/net/41458"
+                                        rel="noopener noreferrer"
+                                        target="_blank"
+                                        >PeeringDB profile</a
+                                    >
+                                </li>
+                                <li class="muted">Looking glass: TBD</li>
+                                <li class="muted">Status page: TBD</li>
+                            </ul>
+                        </div>
+                    </div>
+                </div>
+            </section>
+
+            <section id="contact" class="section">
+                <div class="container">
+                    <h2>Contact</h2>
+
+                    <div class="grid-3">
+                        <div class="card">
+                            <h3>NOC / Ops</h3>
+                            <ul class="list">
+                                <li>
+                                    Email:
+                                    <a href="mailto:noc@rofael.net"
+                                        >noc@rofael.net</a
+                                    >
+                                </li>
+                                <li class="muted">
+                                    Response time: best-effort
+                                </li>
+                            </ul>
+                        </div>
+
+                        <div class="card">
+                            <h3>Technical</h3>
+                            <ul class="list">
+                                <li>
+                                    Email:
+                                    <a href="mailto:as402164@rofael.net"
+                                        >as402164@rofael.net</a
+                                    >
+                                </li>
+                                <li class="muted">
+                                    Preferred for routing/BGP questions and
+                                    coordination.
+                                </li>
+                            </ul>
+                        </div>
+
+                        <div class="card">
+                            <h3>Abuse</h3>
+                            <ul class="list">
+                                <li>
+                                    Email:
+                                    <a href="mailto:abuse@rofael.net"
+                                        >abuse@rofael.net</a
+                                    >
+                                </li>
+                                <li class="muted">
+                                    Include timestamps, destination IP, and
+                                    relevant logs.
+                                </li>
+                            </ul>
+                        </div>
+                    </div>
+
+                    <p class="fineprint">
+                        This ASN is a personal lab. If you’re reaching out about
+                        routing, please include the prefix and any observed AS
+                        path.
+                    </p>
+                </div>
+            </section>
+        </main>
+
+        <footer class="site-footer">
+            <div class="container footer__row">
+                <div class="muted">
+                    © <span id="year"></span> Rofnet • AS402164
+                </div>
+                <div class="muted">
+                    <a href="#content">Back to top</a>
+                </div>
+            </div>
+        </footer>
+
+        <script>
+            document.getElementById("year").textContent = String(
+                new Date().getFullYear(),
+            );
+        </script>
+    </body>
+</html>

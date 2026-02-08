@@ -1,0 +1,352 @@
+:root {
+    --bg: #0b0f17;
+    --panel: #111827;
+    --text: #e5e7eb;
+    --muted: #9ca3af;
+    --border: rgba(255, 255, 255, 0.12);
+    --accent: #60a5fa;
+    --accent-2: #a78bfa;
+
+    --ok: #34d399;
+
+    --shadow: 0 12px 30px rgba(0, 0, 0, 0.35);
+    --radius: 14px;
+    --max: 1040px;
+    --pad: 18px;
+}
+
+@media (prefers-color-scheme: light) {
+    :root {
+        --bg: #f7fafc;
+        --panel: #ffffff;
+        --text: #0f172a;
+        --muted: #475569;
+        --border: rgba(15, 23, 42, 0.14);
+        --accent: #2563eb;
+        --accent-2: #7c3aed;
+        --shadow: 0 12px 30px rgba(2, 6, 23, 0.08);
+    }
+}
+
+* {
+    box-sizing: border-box;
+}
+
+html {
+    height: 100;
+    scroll-behavior: smooth;
+    scroll-padding-top: 78px;
+}
+
+body {
+    height: 100%;
+}
+
+body {
+    margin: 0;
+    font-family:
+        ui-sans-serif,
+        system-ui,
+        -apple-system,
+        Segoe UI,
+        Roboto,
+        Helvetica,
+        Arial,
+        "Apple Color Emoji",
+        "Segoe UI Symbol";
+    background:
+        radial-gradient(
+            1200px 700px at 10% 0%,
+            rgba(96, 165, 250, 0.22),
+            transparent 55%
+        ),
+        radial-gradient(
+            900px 600px at 90% 10%,
+            rgba(167, 139, 250, 0.18),
+            transparent 55%
+        ),
+        var(--bg);
+    color: var(--text);
+    line-height: 1.55;
+}
+
+a {
+    color: inherit;
+    text-decoration-color: color-mix(in oklab, currentColor 60%, transparent);
+    text-underline-offset: 3px;
+}
+
+a:hover {
+    text-decoration-color: currentColor;
+}
+
+.container {
+    width: min(var(--max), calc(100% - 2 * var(--pad)));
+    margin: 0 auto;
+}
+
+.skip-link {
+    position: absolute;
+    left: -999px;
+    top: 12px;
+    padding: 10px 12px;
+    background: var(--panel);
+    border: 1px solid var(--border);
+    border-radius: 10px;
+}
+.skip-link:focus {
+    left: 12px;
+    z-index: 10;
+}
+
+.site-header {
+    position: sticky;
+    top: 0;
+    z-index: 5;
+    backdrop-filter: blur(10px);
+    background: color-mix(in oklab, var(--bg) 75%, transparent);
+    border-bottom: 1px solid var(--border);
+}
+
+.site-header .container {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: 14px;
+    padding: 14px 0;
+}
+
+.brand {
+    display: flex;
+    gap: 12px;
+    align-items: center;
+}
+
+.brand__mark {
+    width: 42px;
+    height: 42px;
+    border-radius: 12px;
+    display: grid;
+    place-items: center;
+    font-weight: 800;
+    background: linear-gradient(135deg, var(--accent), var(--accent-2));
+    color: white;
+    box-shadow: var(--shadow);
+}
+
+.brand__title {
+    font-weight: 800;
+    letter-spacing: 0.2px;
+}
+
+.brand__subtitle {
+    color: var(--muted);
+    font-size: 0.92rem;
+}
+
+.nav {
+    display: flex;
+    gap: 14px;
+    flex-wrap: wrap;
+    justify-content: flex-end;
+}
+
+.nav a {
+    color: var(--muted);
+    text-decoration: none;
+    padding: 8px 10px;
+    border-radius: 10px;
+    border: 1px solid transparent;
+}
+.nav a:hover {
+    color: var(--text);
+    border-color: var(--border);
+    background: color-mix(in oklab, var(--panel) 65%, transparent);
+}
+
+.hero {
+    padding: 44px 0 24px;
+}
+
+.hero__grid {
+    display: grid;
+    grid-template-columns: 1.35fr 0.65fr;
+    gap: 18px;
+    align-items: start;
+}
+
+@media (max-width: 860px) {
+    .hero__grid {
+        grid-template-columns: 1fr;
+    }
+}
+
+h1 {
+    font-size: clamp(2rem, 3vw, 3rem);
+    line-height: 1.15;
+    margin: 0 0 10px;
+}
+
+.lead {
+    color: var(--muted);
+    margin: 0 0 18px;
+    font-size: 1.06rem;
+}
+
+.cta-row {
+    display: flex;
+    gap: 10px;
+    flex-wrap: wrap;
+    margin-bottom: 18px;
+}
+
+.button {
+    display: inline-block;
+    padding: 10px 14px;
+    border-radius: 12px;
+    border: 1px solid var(--border);
+    background: linear-gradient(
+        135deg,
+        color-mix(in oklab, var(--accent) 55%, transparent),
+        color-mix(in oklab, var(--accent-2) 45%, transparent)
+    );
+    color: var(--text);
+    text-decoration: none;
+    box-shadow: var(--shadow);
+}
+
+.button--secondary {
+    background: color-mix(in oklab, var(--panel) 80%, transparent);
+    box-shadow: none;
+}
+
+.section {
+    padding: 26px 0;
+}
+
+.section h2 {
+    margin: 0 0 12px;
+    font-size: 1.35rem;
+}
+
+.grid-3 {
+    display: grid;
+    grid-template-columns: repeat(3, 1fr);
+    gap: 14px;
+}
+
+.grid-2 {
+    display: grid;
+    grid-template-columns: repeat(2, 1fr);
+    gap: 14px;
+}
+
+@media (max-width: 860px) {
+    .grid-3,
+    .grid-2 {
+        grid-template-columns: 1fr;
+    }
+}
+
+.card {
+    background: color-mix(in oklab, var(--panel) 88%, transparent);
+    border: 1px solid var(--border);
+    border-radius: var(--radius);
+    padding: 16px;
+    box-shadow: var(--shadow);
+}
+
+.card--flat {
+    margin-top: 14px;
+    box-shadow: none;
+}
+
+.card__title {
+    margin: 0 0 10px;
+    font-size: 1.05rem;
+}
+
+.muted {
+    color: var(--muted);
+}
+
+.list {
+    list-style: none;
+    margin: 0;
+    padding: 0;
+    display: grid;
+    gap: 10px;
+}
+
+.quick-facts {
+    list-style: none;
+    margin: 0;
+    padding: 0;
+    display: grid;
+    gap: 6px;
+    color: var(--muted);
+}
+
+.dl {
+    margin: 0;
+}
+
+.dl__row {
+    display: grid;
+    grid-template-columns: 140px 1fr;
+    gap: 12px;
+    padding: 8px 0;
+    border-bottom: 1px dashed var(--border);
+}
+.dl__row:last-child {
+    border-bottom: none;
+}
+dt {
+    color: var(--muted);
+}
+dd {
+    margin: 0;
+}
+
+.pill {
+    display: inline-flex;
+    align-items: center;
+    padding: 2px 9px;
+    border-radius: 999px;
+    border: 1px solid var(--border);
+    background: color-mix(in oklab, var(--panel) 80%, transparent);
+    font-size: 0.85rem;
+    margin-left: 6px;
+}
+
+.pill--ok {
+    border-color: color-mix(in oklab, var(--ok) 45%, var(--border));
+    background: color-mix(in oklab, var(--ok) 18%, transparent);
+}
+
+.mono {
+    overflow-x: auto;
+    background: color-mix(in oklab, var(--panel) 88%, transparent);
+    border: 1px solid var(--border);
+    border-radius: 12px;
+    padding: 12px;
+}
+
+.fineprint {
+    margin-top: 12px;
+    color: var(--muted);
+    font-size: 0.92rem;
+}
+
+.site-footer {
+    border-top: 1px solid var(--border);
+    padding: 18px 0 30px;
+    margin-top: 10px;
+}
+
+.footer__row {
+    display: flex;
+    justify-content: space-between;
+    gap: 12px;
+    flex-wrap: wrap;
+}
