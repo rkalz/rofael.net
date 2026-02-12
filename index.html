@@ -62,8 +62,8 @@
                             <li><strong>ASN:</strong> 402164</li>
                             <li><strong>IPv6:</strong> 2620:5a:d000::/48</li>
                             <li>
-                                <strong>Upstream:</strong> Neptune Networks
-                                (AS21700) — NYC
+                                <strong>Upstream transits:</strong> AS21700 —
+                                NYC, AS20473 — NJ
                             </li>
                             <li>
                                 <strong>IPv4:</strong>
@@ -108,18 +108,27 @@
                             </div>
                             <div class="dl__row">
                                 <dt>Transit</dt>
-                                <dd>No (single upstream)</dd>
+                                <dd>Yes (multi-homed: AS21700 + AS20473)</dd>
                             </div>
                             <div class="dl__row">
-                                <dt>Peering</dt>
+                                <dt>Upstream transits</dt>
                                 <dd>
-                                    See
-                                    <a
-                                        href="https://www.peeringdb.com/net/41458"
-                                        rel="noopener noreferrer"
-                                        target="_blank"
-                                        >PeeringDB</a
-                                    >
+                                    <ul class="inline-meta">
+                                        <li>
+                                            Neptune Networks (AS21700) — NYC
+                                        </li>
+                                        <li>
+                                            Vultr (AS20473) — Piscataway, NJ
+                                        </li>
+                                        <li>
+                                            <a
+                                                href="https://www.peeringdb.com/net/41458"
+                                                rel="noopener noreferrer"
+                                                target="_blank"
+                                                >PeeringDB</a
+                                            >
+                                        </li>
+                                    </ul>
                                 </dd>
                             </div>
                             <div class="dl__row">
@@ -172,8 +181,9 @@
                         <div class="card">
                             <h3>Scope</h3>
                             <p class="muted">
-                                Single upstream (Neptune Networks, AS21700 —
-                                NYC). No transit offered.
+                                Multi-homed anycast with upstream transit via
+                                Neptune Networks and Vultr. No transit offered
+                                to third parties.
                             </p>
                         </div>
                         <div class="card">
@@ -193,13 +203,16 @@
 
                     <div class="grid-2">
                         <div class="card">
-                            <h3>Upstream</h3>
+                            <h3>Upstream transits</h3>
                             <ul class="list">
                                 <li>
-                                    <strong>Provider:</strong> Neptune Networks
+                                    <strong>Transit 1:</strong> Neptune Networks
+                                    (AS21700) — New York City
                                 </li>
-                                <li><strong>ASN:</strong> AS21700</li>
-                                <li><strong>Location:</strong> NYC</li>
+                                <li>
+                                    <strong>Transit 2:</strong> Vultr (AS20473)
+                                    — Piscataway, NJ
+                                </li>
                             </ul>
                         </div>
 
@@ -218,7 +231,18 @@
                         <h3>Policy (informal)</h3>
                         <ul class="list">
                             <li>Best-effort only; no guarantees.</li>
-                            <li>No transit or downstream customers.</li>
+                            <li>
+                                No transit or downstream customers
+                                (origin-only).
+                            </li>
+                            <li>
+                                Receives upstream transit from AS21700 (NYC) and
+                                AS20473 (New Jersey).
+                            </li>
+                            <li>
+                                Multi-homed anycast announcements (same prefixes
+                                announced from multiple locations/providers).
+                            </li>
                             <li>
                                 Filtering/security: RPKI (ROAs) + IRR-based
                                 hygiene.
@@ -238,9 +262,12 @@
 
                         <pre class="mono"><code>
 Rofnet (AS402164)
-  - Upstream: AS21700 (Neptune Networks) — NYC
+  - Upstream transits:
+    - AS21700 (Neptune Networks) — New York, NY
+    - AS20473 (Vultr) — Piscataway, NJ
   - IPv6: 2620:5a:d000::/48
   - IPv4: none
+  - Anycast: yes (multi-homed announcements)
   - RPKI: enabled (ROAs published)
   - IRR: route objects present (ARIN IRR) — see IRR Explorer
   - PeeringDB: https://www.peeringdb.com/net/41458
@@ -442,9 +469,8 @@ Rofnet (AS402164)
                     </div>
 
                     <p class="fineprint">
-                        This ASN is a personal lab. If you’re reaching out about
-                        routing, please include the prefix and any observed AS
-                        path.
+                        For routing issues: include prefix, timestamp (UTC), and
+                        observed AS path.
                     </p>
                 </div>
             </section>
