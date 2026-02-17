@@ -29,8 +29,10 @@ jobs:
             echo "files=all" >> $GITHUB_OUTPUT
           else
             CHANGED_FILES=$(git diff --name-only HEAD~1 2>/dev/null || echo "all")
-            echo "Changed files: $CHANGED_FILES"
-            echo "files=$CHANGED_FILES" >> $GITHUB_OUTPUT
+            # Convert newlines to spaces for single-line output
+            CHANGED_FILES_ONELINE=$(echo "$CHANGED_FILES" | tr '\n' ' ')
+            echo "Changed files: $CHANGED_FILES_ONELINE"
+            echo "files=$CHANGED_FILES_ONELINE" >> $GITHUB_OUTPUT
           fi
 
       - name: Update nginx config if changed
