@@ -17,6 +17,25 @@ jobs:
       - name: Checkout code
         uses: actions/checkout@v4
 
+      - name: Debug environment
+        run: |
+          echo "=== Environment Debug ==="
+          echo "User: $(whoami)"
+          echo "Home: $HOME"
+          echo "PWD: $(pwd)"
+          echo "Working directory contents:"
+          ls -la
+          echo ""
+          echo "Nginx config file:"
+          ls -la nginx/rofael.net.conf
+          echo ""
+          echo "Full path to nginx config:"
+          realpath nginx/rofael.net.conf
+          echo ""
+          echo "Testing sudo -l:"
+          sudo -l | grep cp
+          echo "======================="
+
       - name: Check what files changed
         id: changes
         run: |
