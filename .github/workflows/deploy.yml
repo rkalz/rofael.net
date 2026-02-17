@@ -53,7 +53,7 @@ jobs:
         if: contains(steps.changes.outputs.files, 'nginx/') || contains(steps.changes.outputs.files, 'all')
         run: |
           echo "Nginx config changed, updating..."
-          sudo /usr/bin/cp nginx/rofael.net.conf /etc/nginx/sites-available/rofael.net
+          sudo /usr/bin/cp /home/ghrunner/actions-runner/_work/rofael.net/rofael.net/nginx/rofael.net.conf /etc/nginx/sites-available/rofael.net
           sudo /usr/sbin/nginx -t
           sudo /usr/sbin/nginx -s reload
           echo "✅ Nginx reloaded"
