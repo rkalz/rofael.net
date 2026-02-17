@@ -3,11 +3,6 @@ name: Validate Server Configuration
 on:
   workflow_call: # Can be called by other workflows
   workflow_dispatch: # Can be run manually
-  push:
-    branches: [master]
-    paths:
-      - ".github/workflows/**"
-      - "nginx/**"
 
 jobs:
   validate:
