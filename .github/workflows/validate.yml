@@ -11,6 +11,9 @@ jobs:
     steps:
       - name: Checkout code
         uses: actions/checkout@v4
+        with:
+          persist-credentials: false
+          fetch-depth: 1
 
       - name: Verify sudoers configuration
         run: |
@@ -81,7 +84,7 @@ jobs:
           echo "✅ Docker is accessible"
           docker --version
 
-      - name: Verify nginx configuration files
+      - name: Verify nginx configuration syntax
         run: |
           echo "=== Checking nginx configuration ==="
 
@@ -109,6 +112,35 @@ jobs:
 
           echo "✅ /etc/nginx/sites-enabled directory exists"
 
+          # Validate nginx config syntax before deployment
+          echo ""
+          echo "Testing nginx configuration syntax..."
+          sudo cp nginx/rofael.net.conf /tmp/rofael.net.conf.test
+
+          # Test the config by temporarily copying it and running nginx -t
+          CURRENT_CONFIG_BACKUP=/tmp/rofael.net.conf.backup
+          if [ -f /etc/nginx/sites-available/rofael.net ]; then
+            sudo cp /etc/nginx/sites-available/rofael.net "$CURRENT_CONFIG_BACKUP"
+          fi
+
+          sudo cp /tmp/rofael.net.conf.test /etc/nginx/sites-available/rofael.net
+
+          if sudo /usr/sbin/nginx -t 2>&1; then
+            echo "✅ nginx configuration syntax is valid"
+          else
+            echo "❌ nginx configuration syntax is invalid!"
+            # Restore backup if exists
+            if [ -f "$CURRENT_CONFIG_BACKUP" ]; then
+              sudo cp "$CURRENT_CONFIG_BACKUP" /etc/nginx/sites-available/rofael.net
+            fi
+            exit 1
+          fi
+
+          # Restore original config
+          if [ -f "$CURRENT_CONFIG_BACKUP" ]; then
+            sudo cp "$CURRENT_CONFIG_BACKUP" /etc/nginx/sites-available/rofael.net
+          fi
+
           echo ""
           echo "=== All nginx checks passed! ==="
 
@@ -124,7 +156,59 @@ jobs:
 
             # Check expiration
             EXPIRY=$(sudo openssl x509 -enddate -noout -in /etc/letsencrypt/live/rofael.net/fullchain.pem | cut -d= -f2)
+            EXPIRY_EPOCH=$(date -d "$EXPIRY" +%s)
+            NOW_EPOCH=$(date +%s)
+            DAYS_UNTIL_EXPIRY=$(( ($EXPIRY_EPOCH - $NOW_EPOCH) / 86400 ))
+
             echo "Certificate expires: $EXPIRY"
+            echo "Days until expiration: $DAYS_UNTIL_EXPIRY"
+
+            if [ $DAYS_UNTIL_EXPIRY -lt 30 ]; then
+              echo "⚠️  Warning: Certificate expires in less than 30 days!"
+            fi
+          fi
+
+      - name: Check port availability
+        run: |
+          echo "=== Checking port availability ==="
+
+          # Check which ports are in use
+          PORT_8081_IN_USE=$(docker ps --format '{{.Ports}}' 2>/dev/null | grep -c "8081->80" || echo "0")
+          PORT_8082_IN_USE=$(docker ps --format '{{.Ports}}' 2>/dev/null | grep -c "8082->80" || echo "0")
+
+          echo "Port 8081 in use: $PORT_8081_IN_USE container(s)"
+          echo "Port 8082 in use: $PORT_8082_IN_USE container(s)"
+
+          if [ "$PORT_8081_IN_USE" -gt 0 ] && [ "$PORT_8082_IN_USE" -gt 0 ]; then
+            echo "⚠️  Warning: Both deployment ports are in use"
+            echo "This might cause issues during deployment"
+          else
+            echo "✅ At least one deployment port is available"
+          fi
+
+      - name: Verify Dockerfile exists
+        run: |
+          echo "=== Checking Dockerfile ==="
+
+          if [ ! -f Dockerfile ]; then
+            echo "❌ Error: Dockerfile not found in repository root"
+            exit 1
+          fi
+
+          echo "✅ Dockerfile exists"
+
+      - name: Test Docker build (optional)
+        if: github.event_name == 'workflow_dispatch'
+        run: |
+          echo "=== Testing Docker build ==="
+          echo "Building test image..."
+
+          if docker build -t rofael-net:test . > /dev/null 2>&1; then
+            echo "✅ Docker build successful"
+            docker rmi rofael-net:test
+          else
+            echo "❌ Docker build failed"
+            exit 1
           fi
 
       - name: Summary
@@ -133,4 +217,6 @@ jobs:
           echo ""
           echo "=== Validation Summary ==="
           echo "Status: ${{ job.status }}"
+          echo "Commit: ${{ github.sha }}"
+          echo "Branch: ${{ github.ref_name }}"
           echo "======================="

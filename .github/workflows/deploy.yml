@@ -16,25 +16,9 @@ jobs:
     steps:
       - name: Checkout code
         uses: actions/checkout@v4
-
-      - name: Debug environment
-        run: |
-          echo "=== Environment Debug ==="
-          echo "User: $(whoami)"
-          echo "Home: $HOME"
-          echo "PWD: $(pwd)"
-          echo "Working directory contents:"
-          ls -la
-          echo ""
-          echo "Nginx config file:"
-          ls -la nginx/rofael.net.conf
-          echo ""
-          echo "Full path to nginx config:"
-          realpath nginx/rofael.net.conf
-          echo ""
-          echo "Testing sudo -l:"
-          sudo -l | grep cp
-          echo "======================="
+        with:
+          persist-credentials: false
+          fetch-depth: 2
 
       - name: Check what files changed
         id: changes
@@ -73,36 +57,86 @@ jobs:
       - name: Build Docker image
         run: |
           echo "Building Docker image..."
-          docker build -t rofael-net:latest .
+          docker build -t rofael-net:${{ github.sha }} -t rofael-net:latest .
           echo "✅ Docker image built"
+
+      - name: Determine which port to use
+        id: ports
+        run: |
+          # Check which port the current container is using
+          if docker ps --format '{{.Names}}\t{{.Ports}}' 2>/dev/null | grep rofael-net-container | grep -q "8081->80"; then
+            echo "Current container on port 8081, will use 8082 for new"
+            echo "old_port=8081" >> $GITHUB_OUTPUT
+            echo "new_port=8082" >> $GITHUB_OUTPUT
+            echo "old_name=rofael-net-container" >> $GITHUB_OUTPUT
+            echo "new_name=rofael-net-container-new" >> $GITHUB_OUTPUT
+          else
+            echo "Current container on port 8082 (or not running), will use 8081 for new"
+            echo "old_port=8082" >> $GITHUB_OUTPUT
+            echo "new_port=8081" >> $GITHUB_OUTPUT
+            echo "old_name=rofael-net-container" >> $GITHUB_OUTPUT
+            echo "new_name=rofael-net-container-new" >> $GITHUB_OUTPUT
+          fi
+
+      - name: Start new container
+        run: |
+          echo "Starting new container on port ${{ steps.ports.outputs.new_port }}..."
+          docker run -d \
+            --name ${{ steps.ports.outputs.new_name }} \
+            --restart unless-stopped \
+            -p 127.0.0.1:${{ steps.ports.outputs.new_port }}:80 \
+            rofael-net:latest
+          echo "✅ New container started"
+
+      - name: Health check new container
+        run: |
+          echo "Waiting for new container to be ready..."
+          sleep 3
+
+          # Check if container is running
+          if ! docker ps | grep -q ${{ steps.ports.outputs.new_name }}; then
+            echo "❌ New container failed to start!"
+            docker logs ${{ steps.ports.outputs.new_name }}
+            exit 1
+          fi
+
+          # Check if container is responding
+          MAX_ATTEMPTS=10
+          ATTEMPT=0
+          while [ $ATTEMPT -lt $MAX_ATTEMPTS ]; do
+            if curl -f -s http://127.0.0.1:${{ steps.ports.outputs.new_port }} > /dev/null 2>&1; then
+              echo "✅ New container is healthy and responding"
+              exit 0
+            fi
+            echo "Attempt $((ATTEMPT+1))/$MAX_ATTEMPTS: Container not ready yet..."
+            sleep 2
+            ATTEMPT=$((ATTEMPT+1))
+          done
+
+          echo "❌ New container not responding after $MAX_ATTEMPTS attempts!"
+          docker logs ${{ steps.ports.outputs.new_name }}
+          exit 1
 
       - name: Stop old container
         run: |
           echo "Stopping old container..."
-          docker stop rofael-net-container 2>/dev/null || true
-          docker rm rofaetn-net-container 2>/dev/null || true
-          echo "✅ Old container stopped"
+          docker rm -f ${{ steps.ports.outputs.old_name }} 2>/dev/null || true
+          echo "✅ Old container removed"
 
-      - name: Start new container
+      - name: Rename new container to standard name
         run: |
-          echo "Starting new container..."
-          docker run -d \
-            --name rofael-net-container \
-            --restart unless-stopped \
-            -p 127.0.0.1:8081:80 \
-            rofael-net:latest
-          echo "✅ Container started"
+          echo "Renaming new container..."
+          docker rename ${{ steps.ports.outputs.new_name }} rofael-net-container
+          echo "✅ Container renamed to rofael-net-container"
 
       - name: Verify deployment
         run: |
-          echo "Waiting for container to start..."
-          sleep 3
+          echo "Verifying deployment..."
           if docker ps | grep -q rofael-net-container; then
             echo "✅ Deployment successful!"
             docker ps | grep rofael-net-container
           else
-            echo "❌ Deployment failed!"
-            docker logs rofael-net-container
+            echo "❌ Deployment verification failed!"
             exit 1
           fi
 
@@ -121,4 +155,5 @@ jobs:
           echo "Commit: ${{ github.sha }}"
           echo "Triggered by: ${{ github.actor }}"
           echo "Status: ${{ job.status }}"
+          echo "Port used: ${{ steps.ports.outputs.new_port }}"
           echo "======================="
