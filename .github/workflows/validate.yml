@@ -32,30 +32,31 @@ jobs:
           # Show what commands are allowed
           echo ""
           echo "Allowed sudo commands:"
-          sudo -l | grep NOPASSWD || echo "⚠️  Warning: No NOPASSWD entries found"
+          SUDO_LIST=$(sudo -l)
+          echo "$SUDO_LIST" | grep NOPASSWD || echo "⚠️  Warning: No NOPASSWD entries found"
 
-          # Test each required command
+          # Test each required command by checking if it's in the list
           echo ""
           echo "Testing required sudo commands..."
 
           # Test cp
-          if sudo -n /usr/bin/cp --version > /dev/null 2>&1; then
-            echo "✅ /usr/bin/cp is allowed"
+          if echo "$SUDO_LIST" | grep -q "/usr/bin/cp.*rofael.net.conf"; then
+            echo "✅ /usr/bin/cp (nginx config) is allowed"
           else
-            echo "❌ /usr/bin/cp is NOT allowed"
+            echo "❌ /usr/bin/cp (nginx config) is NOT allowed"
             exit 1
           fi
 
           # Test ln
-          if sudo -n /usr/bin/ln --version > /dev/null 2>&1; then
-            echo "✅ /usr/bin/ln is allowed"
+          if echo "$SUDO_LIST" | grep -q "/usr/bin/ln.*rofael.net"; then
+            echo "✅ /usr/bin/ln (symlink) is allowed"
           else
-            echo "❌ /usr/bin/ln is NOT allowed"
+            echo "❌ /usr/bin/ln (symlink) is NOT allowed"
             exit 1
           fi
 
           # Test nginx -t
-          if sudo -n /usr/sbin/nginx -t > /dev/null 2>&1; then
+          if echo "$SUDO_LIST" | grep -q "nginx -t"; then
             echo "✅ /usr/sbin/nginx -t is allowed"
           else
             echo "❌ /usr/sbin/nginx -t is NOT allowed"
@@ -63,10 +64,10 @@ jobs:
           fi
 
           # Test nginx -s reload
-          if sudo -n -l | grep -q "nginx -s reload"; then
-            echo "✅ /usr/sbin/nginx -s reload is configured"
+          if echo "$SUDO_LIST" | grep -q "nginx -s reload"; then
+            echo "✅ /usr/sbin/nginx -s reload is allowed"
           else
-            echo "❌ /usr/sbin/nginx -s reload is NOT configured"
+            echo "❌ /usr/sbin/nginx -s reload is NOT allowed"
             exit 1
           fi
 
