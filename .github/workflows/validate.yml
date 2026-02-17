@@ -1,0 +1,140 @@
+name: Validate Server Configuration
+
+on:
+  workflow_call: # Can be called by other workflows
+  workflow_dispatch: # Can be run manually
+  push:
+    branches: [master]
+    paths:
+      - ".github/workflows/**"
+      - "nginx/**"
+
+jobs:
+  validate:
+    runs-on: self-hosted
+
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v4
+
+      - name: Verify sudoers configuration
+        run: |
+          echo "=== Checking sudoers configuration ==="
+
+          # Check if we can run sudo -l without password
+          if ! sudo -n -l > /dev/null 2>&1; then
+            echo "❌ Error: Cannot run sudo -l without password"
+            exit 1
+          fi
+
+          echo "✅ Sudoers file is readable"
+
+          # Show what commands are allowed
+          echo ""
+          echo "Allowed sudo commands:"
+          sudo -l | grep NOPASSWD || echo "⚠️  Warning: No NOPASSWD entries found"
+
+          # Test each required command
+          echo ""
+          echo "Testing required sudo commands..."
+
+          # Test cp
+          if sudo -n /usr/bin/cp --version > /dev/null 2>&1; then
+            echo "✅ /usr/bin/cp is allowed"
+          else
+            echo "❌ /usr/bin/cp is NOT allowed"
+            exit 1
+          fi
+
+          # Test ln
+          if sudo -n /usr/bin/ln --version > /dev/null 2>&1; then
+            echo "✅ /usr/bin/ln is allowed"
+          else
+            echo "❌ /usr/bin/ln is NOT allowed"
+            exit 1
+          fi
+
+          # Test nginx -t
+          if sudo -n /usr/sbin/nginx -t > /dev/null 2>&1; then
+            echo "✅ /usr/sbin/nginx -t is allowed"
+          else
+            echo "❌ /usr/sbin/nginx -t is NOT allowed"
+            exit 1
+          fi
+
+          # Test nginx -s reload
+          if sudo -n -l | grep -q "nginx -s reload"; then
+            echo "✅ /usr/sbin/nginx -s reload is configured"
+          else
+            echo "❌ /usr/sbin/nginx -s reload is NOT configured"
+            exit 1
+          fi
+
+          echo ""
+          echo "=== All sudoers checks passed! ==="
+
+      - name: Verify Docker access
+        run: |
+          echo "=== Checking Docker configuration ==="
+
+          if ! docker ps > /dev/null 2>&1; then
+            echo "❌ Error: Cannot access Docker"
+            exit 1
+          fi
+
+          echo "✅ Docker is accessible"
+          docker --version
+
+      - name: Verify nginx configuration files
+        run: |
+          echo "=== Checking nginx configuration ==="
+
+          # Check if nginx config exists in repo
+          if [ ! -f nginx/rofael.net.conf ]; then
+            echo "❌ Error: nginx/rofael.net.conf not found in repo"
+            exit 1
+          fi
+
+          echo "✅ nginx/rofael.net.conf exists in repo"
+
+          # Check if sites-available directory exists
+          if [ ! -d /etc/nginx/sites-available ]; then
+            echo "❌ Error: /etc/nginx/sites-available directory not found"
+            exit 1
+          fi
+
+          echo "✅ /etc/nginx/sites-available directory exists"
+
+          # Check if sites-enabled directory exists
+          if [ ! -d /etc/nginx/sites-enabled ]; then
+            echo "❌ Error: /etc/nginx/sites-enabled directory not found"
+            exit 1
+          fi
+
+          echo "✅ /etc/nginx/sites-enabled directory exists"
+
+          echo ""
+          echo "=== All nginx checks passed! ==="
+
+      - name: Verify SSL certificates
+        run: |
+          echo "=== Checking SSL certificates ==="
+
+          if [ ! -f /etc/letsencrypt/live/rofael.net/fullchain.pem ]; then
+            echo "⚠️  Warning: SSL certificate not found at /etc/letsencrypt/live/rofael.net/fullchain.pem"
+            echo "You may need to run: sudo certbot certonly --dns-cloudflare -d rofael.net"
+          else
+            echo "✅ SSL certificate exists"
+
+            # Check expiration
+            EXPIRY=$(sudo openssl x509 -enddate -noout -in /etc/letsencrypt/live/rofael.net/fullchain.pem | cut -d= -f2)
+            echo "Certificate expires: $EXPIRY"
+          fi
+
+      - name: Summary
+        if: always()
+        run: |
+          echo ""
+          echo "=== Validation Summary ==="
+          echo "Status: ${{ job.status }}"
+          echo "======================="

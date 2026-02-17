@@ -6,8 +6,12 @@ on:
   workflow_dispatch: # Allows manual trigger from GitHub UI
 
 jobs:
+  validate:
+    uses: ./.github/workflows/validate.yml
+
   deploy:
     runs-on: self-hosted
+    needs: validate # Only run deploy if validation passes
 
     steps:
       - name: Checkout code
@@ -30,10 +34,22 @@ jobs:
         if: contains(steps.changes.outputs.files, 'nginx/') || contains(steps.changes.outputs.files, 'all')
         run: |
           echo "Nginx config changed, updating..."
-          sudo cp nginx/rofael.net.conf /etc/nginx/sites-available/rofael.net
-          sudo nginx -t
-          sudo nginx -s reload
+          sudo /usr/bin/cp nginx/rofael.net.conf /etc/nginx/sites-available/rofael.net
+          sudo /usr/sbin/nginx -t
+          sudo /usr/sbin/nginx -s reload
           echo "✅ Nginx reloaded"
+
+      - name: Ensure nginx symlink exists
+        run: |
+          if [ ! -L /etc/nginx/sites-enabled/rofael.net ]; then
+            echo "Symlink doesn't exist, creating it..."
+            sudo /usr/bin/ln -s /etc/nginx/sites-available/rofael.net /etc/nginx/sites-enabled/rofael.net
+            sudo /usr/sbin/nginx -t
+            sudo /usr/sbin/nginx -s reload
+            echo "✅ Symlink created and nginx reloaded"
+          else
+            echo "✅ Symlink already exists"
+          fi
 
       - name: Build Docker image
         run: |
