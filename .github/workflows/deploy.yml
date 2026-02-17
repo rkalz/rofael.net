@@ -73,36 +73,36 @@ jobs:
       - name: Build Docker image
         run: |
           echo "Building Docker image..."
-          docker build -t mysite:latest .
+          docker build -t rofael-net:latest .
           echo "✅ Docker image built"
 
       - name: Stop old container
         run: |
           echo "Stopping old container..."
-          docker stop mysite-container 2>/dev/null || true
-          docker rm mysite-container 2>/dev/null || true
+          docker stop rofael-net-container 2>/dev/null || true
+          docker rm rofaetn-net-container 2>/dev/null || true
           echo "✅ Old container stopped"
 
       - name: Start new container
         run: |
           echo "Starting new container..."
           docker run -d \
-            --name mysite-container \
+            --name rofael-net-container \
             --restart unless-stopped \
             -p 127.0.0.1:8081:80 \
-            mysite:latest
+            rofael-net:latest
           echo "✅ Container started"
 
       - name: Verify deployment
         run: |
           echo "Waiting for container to start..."
           sleep 3
-          if docker ps | grep -q mysite-container; then
+          if docker ps | grep -q rofael-net-container; then
             echo "✅ Deployment successful!"
-            docker ps | grep mysite-container
+            docker ps | grep rofael-net-container
           else
             echo "❌ Deployment failed!"
-            docker logs mysite-container
+            docker logs rofael-net-container
             exit 1
           fi
 
