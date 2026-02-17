@@ -2,7 +2,7 @@ name: Deploy to Home Server
 
 on:
   push:
-    branches: [main]
+    branches: [master]
   workflow_dispatch: # Allows manual trigger from GitHub UI
 
 jobs:
