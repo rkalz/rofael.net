@@ -12,7 +12,6 @@
             name="description"
             content="Rofnet (AS402164) — homelab ASN. Contact info, status, and routing notes."
         />
-
         <link rel="stylesheet" href="./styles.css" />
     </head>
 
@@ -29,16 +28,6 @@
                     </div>
                 </div>
 
-                <div class="header-connection">
-                    <div class="connection-label">Your connection:</div>
-                    <div class="connection-info">
-                        <span id="connection-type" class="pill pill--checking"
-                            >Checking...</span
-                        >
-                        <span id="connection-ip" class="connection-ip">—</span>
-                    </div>
-                </div>
-
                 <nav class="nav" aria-label="Primary">
                     <a href="#about">About</a>
                     <a href="#routing">Routing</a>
@@ -48,6 +37,15 @@
                 </nav>
             </div>
         </header>
+
+        <div class="ip-banner">
+            <div class="container">
+                <span class="ip-banner__label">Your IP:</span>
+                <span id="connection-ip" class="ip-banner__address"
+                    >Checking...</span
+                >
+            </div>
+        </div>
 
         <main id="content">
             <section class="hero">
@@ -85,8 +83,9 @@
                                     href="https://www.peeringdb.com/net/41458"
                                     rel="noopener noreferrer"
                                     target="_blank"
-                                    >net/41458</a
                                 >
+                                    net/41458
+                                </a>
                             </li>
                             <li>
                                 <strong>RPKI:</strong>
@@ -94,8 +93,9 @@
                                     href="https://stat.ripe.net/2620:5a:d000::/48"
                                     rel="noopener noreferrer"
                                     target="_blank"
-                                    >Visible on RIPEstat</a
                                 >
+                                    Visible on RIPEstat
+                                </a>
                             </li>
                             <li>
                                 <strong>IRR:</strong>
@@ -103,8 +103,9 @@
                                     href="https://irrexplorer.nlnog.net/prefix/2620:5a:d000::/48"
                                     rel="noopener noreferrer"
                                     target="_blank"
-                                    >View route objects</a
                                 >
+                                    View route objects
+                                </a>
                             </li>
                         </ul>
                     </div>
@@ -135,8 +136,9 @@
                                                 href="https://www.peeringdb.com/net/41458"
                                                 rel="noopener noreferrer"
                                                 target="_blank"
-                                                >PeeringDB</a
                                             >
+                                                PeeringDB
+                                            </a>
                                         </li>
                                     </ul>
                                 </dd>
@@ -149,8 +151,9 @@
                                         href="https://stat.ripe.net/2620:5a:d000::/48"
                                         rel="noopener noreferrer"
                                         target="_blank"
-                                        >RIPEstat</a
                                     >
+                                        RIPEstat
+                                    </a>
                                 </dd>
                             </div>
                             <div class="dl__row">
@@ -161,8 +164,9 @@
                                         href="https://irrexplorer.nlnog.net/prefix/2620:5a:d000::/48"
                                         rel="noopener noreferrer"
                                         target="_blank"
-                                        >IRR Explorer</a
                                     >
+                                        IRR Explorer
+                                    </a>
                                 </dd>
                             </div>
                         </dl>
@@ -263,15 +267,15 @@
                                     href="https://www.peeringdb.com/net/41458"
                                     rel="noopener noreferrer"
                                     target="_blank"
-                                    >PeeringDB</a
                                 >
+                                    PeeringDB
+                                </a>
                                 for peering/contact details that need to stay
                                 current.
                             </li>
                         </ul>
 
-                        <pre class="mono"><code>
-Rofnet (AS402164)
+                        <pre class="mono"><code>Rofnet (AS402164)
   - Upstream transits:
     - AS21700 (Neptune Networks) — New York, NY
     - AS20473 (Vultr) — Piscataway, NJ
@@ -280,8 +284,7 @@ Rofnet (AS402164)
   - Anycast: yes (multi-homed announcements)
   - RPKI: enabled (ROAs published)
   - IRR: route objects present (ARIN IRR) — see IRR Explorer
-  - PeeringDB: https://www.peeringdb.com/net/41458
-            </code></pre>
+  - PeeringDB: https://www.peeringdb.com/net/41458</code></pre>
                     </div>
                 </div>
             </section>
@@ -304,8 +307,9 @@ Rofnet (AS402164)
                                         href="https://stat.ripe.net/2620:5a:d000::/48"
                                         rel="noopener noreferrer"
                                         target="_blank"
-                                        >2620:5a:d000::/48</a
                                     >
+                                        2620:5a:d000::/48
+                                    </a>
                                 </li>
                                 <li>
                                     RIPEstat (ASN):
@@ -313,8 +317,9 @@ Rofnet (AS402164)
                                         href="https://stat.ripe.net/AS402164"
                                         rel="noopener noreferrer"
                                         target="_blank"
-                                        >AS402164</a
                                     >
+                                        AS402164
+                                    </a>
                                 </li>
                             </ul>
                         </div>
@@ -328,8 +333,9 @@ Rofnet (AS402164)
                                         href="https://irrexplorer.nlnog.net/prefix/2620:5a:d000::/48"
                                         rel="noopener noreferrer"
                                         target="_blank"
-                                        >2620:5a:d000::/48</a
                                     >
+                                        2620:5a:d000::/48
+                                    </a>
                                 </li>
                                 <li>
                                     IRR Explorer (ASN):
@@ -337,8 +343,9 @@ Rofnet (AS402164)
                                         href="https://irrexplorer.nlnog.net/asn/402164"
                                         rel="noopener noreferrer"
                                         target="_blank"
-                                        >AS402164</a
                                     >
+                                        AS402164
+                                    </a>
                                 </li>
                                 <li class="muted">
                                     Raw ARIN whois (port 43):
@@ -360,8 +367,9 @@ Rofnet (AS402164)
                                     href="https://rdap.arin.net/registry/autnum/402164"
                                     rel="noopener noreferrer"
                                     target="_blank"
-                                    >rdap.arin.net/registry/autnum/402164</a
                                 >
+                                    rdap.arin.net/registry/autnum/402164
+                                </a>
                             </li>
                             <li>
                                 Prefix registration:
@@ -369,8 +377,9 @@ Rofnet (AS402164)
                                     href="https://rdap.arin.net/registry/ip/2620:5a:d000::/48"
                                     rel="noopener noreferrer"
                                     target="_blank"
-                                    >rdap.arin.net/registry/ip/2620:5a:d000::/48</a
                                 >
+                                    rdap.arin.net/registry/ip/2620:5a:d000::/48
+                                </a>
                             </li>
                         </ul>
                     </div>
@@ -414,8 +423,9 @@ Rofnet (AS402164)
                                         href="https://www.peeringdb.com/net/41458"
                                         rel="noopener noreferrer"
                                         target="_blank"
-                                        >PeeringDB profile</a
                                     >
+                                        PeeringDB profile
+                                    </a>
                                 </li>
                                 <li class="muted">Looking glass: TBD</li>
                                 <li class="muted">Status page: TBD</li>
@@ -502,28 +512,14 @@ Rofnet (AS402164)
                 new Date().getFullYear(),
             );
 
-            // Detect IPv4 vs IPv6 connection
             async function detectConnectionType() {
-                const typeIndicator =
-                    document.getElementById("connection-type");
                 const ipIndicator = document.getElementById("connection-ip");
 
                 try {
                     const response = await fetch("/api/ip-version");
                     const data = await response.json();
-
-                    if (data.version === "ipv6") {
-                        typeIndicator.textContent = "IPv6";
-                        typeIndicator.className = "pill pill--ipv6";
-                    } else {
-                        typeIndicator.textContent = "IPv4";
-                        typeIndicator.className = "pill pill--ipv4";
-                    }
-
                     ipIndicator.textContent = data.ip;
                 } catch (e) {
-                    typeIndicator.textContent = "Error";
-                    typeIndicator.className = "pill pill--checking";
                     ipIndicator.textContent = "—";
                 }
             }

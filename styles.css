@@ -6,9 +6,7 @@
     --border: rgba(255, 255, 255, 0.12);
     --accent: #60a5fa;
     --accent-2: #a78bfa;
-
     --ok: #34d399;
-
     --shadow: 0 12px 30px rgba(0, 0, 0, 0.35);
     --radius: 14px;
     --max: 1040px;
@@ -40,9 +38,6 @@ html {
 
 body {
     height: 100%;
-}
-
-body {
     margin: 0;
     font-family:
         ui-sans-serif,
@@ -80,6 +75,12 @@ a:hover {
     text-decoration-color: currentColor;
 }
 
+h1 {
+    font-size: clamp(2rem, 3vw, 3rem);
+    line-height: 1.15;
+    margin: 0 0 10px;
+}
+
 .container {
     width: min(var(--max), calc(100% - 2 * var(--pad)));
     margin: 0 auto;
@@ -94,6 +95,7 @@ a:hover {
     border: 1px solid var(--border);
     border-radius: 10px;
 }
+
 .skip-link:focus {
     left: 12px;
     z-index: 10;
@@ -144,33 +146,6 @@ a:hover {
     font-size: 0.92rem;
 }
 
-.header-connection {
-    display: flex;
-    flex-direction: column;
-    gap: 0.25rem;
-    font-size: 0.875rem;
-    margin-left: 1.5rem;
-}
-
-.connection-label {
-    color: var(--muted);
-    font-size: 0.75rem;
-}
-
-.connection-info {
-    display: flex;
-    align-items: center;
-    gap: 0.5rem;
-}
-
-.connection-ip {
-    font-family:
-        ui-monospace, "SF Mono", "Monaco", "Cascadia Code", "Roboto Mono",
-        monospace;
-    font-size: 0.8125rem;
-    color: var(--muted);
-}
-
 .nav {
     display: flex;
     gap: 14px;
@@ -185,10 +160,37 @@ a:hover {
     border-radius: 10px;
     border: 1px solid transparent;
 }
+
 .nav a:hover {
     color: var(--text);
     border-color: var(--border);
     background: color-mix(in oklab, var(--panel) 65%, transparent);
+}
+
+.ip-banner {
+    background: color-mix(in oklab, var(--panel) 60%, transparent);
+    border-bottom: 1px solid var(--border);
+    padding: 10px 0;
+}
+
+.ip-banner .container {
+    display: flex;
+    align-items: center;
+    gap: 0.5rem;
+    font-size: 0.875rem;
+}
+
+.ip-banner__label {
+    color: var(--muted);
+    font-weight: 500;
+}
+
+.ip-banner__address {
+    font-family:
+        ui-monospace, "SF Mono", Monaco, "Cascadia Code", "Roboto Mono",
+        monospace;
+    color: var(--text);
+    font-size: 0.875rem;
 }
 
 .hero {
@@ -200,23 +202,6 @@ a:hover {
     grid-template-columns: 1.35fr 0.65fr;
     gap: 18px;
     align-items: start;
-}
-
-@media (max-width: 860px) {
-    .hero__grid {
-        grid-template-columns: 1fr;
-    }
-
-    .header-connection {
-        margin-left: 0;
-        margin-top: 0.5rem;
-    }
-}
-
-h1 {
-    font-size: clamp(2rem, 3vw, 3rem);
-    line-height: 1.15;
-    margin: 0 0 10px;
 }
 
 .lead {
@@ -252,6 +237,15 @@ h1 {
     box-shadow: none;
 }
 
+.quick-facts {
+    list-style: none;
+    margin: 0;
+    padding: 0;
+    display: grid;
+    gap: 6px;
+    color: var(--muted);
+}
+
 .section {
     padding: 26px 0;
 }
@@ -271,13 +265,6 @@ h1 {
     display: grid;
     grid-template-columns: repeat(2, 1fr);
     gap: 14px;
-}
-
-@media (max-width: 860px) {
-    .grid-3,
-    .grid-2 {
-        grid-template-columns: 1fr;
-    }
 }
 
 .card {
@@ -310,15 +297,6 @@ h1 {
     gap: 10px;
 }
 
-.quick-facts {
-    list-style: none;
-    margin: 0;
-    padding: 0;
-    display: grid;
-    gap: 6px;
-    color: var(--muted);
-}
-
 .dl {
     margin: 0;
 }
@@ -330,12 +308,15 @@ h1 {
     padding: 8px 0;
     border-bottom: 1px dashed var(--border);
 }
+
 .dl__row:last-child {
     border-bottom: none;
 }
+
 dt {
     color: var(--muted);
 }
+
 dd {
     margin: 0;
 }
@@ -364,24 +345,6 @@ dd {
     background: color-mix(in oklab, var(--ok) 18%, transparent);
 }
 
-.pill--ipv4 {
-    background: #60a5fa;
-    color: white;
-    border-color: #60a5fa;
-}
-
-.pill--ipv6 {
-    background: #34d399;
-    color: white;
-    border-color: #34d399;
-}
-
-.pill--checking {
-    background: #d1d5db;
-    color: #374151;
-    border-color: #d1d5db;
-}
-
 .mono {
     overflow-x: auto;
     background: color-mix(in oklab, var(--panel) 88%, transparent);
@@ -407,4 +370,16 @@ dd {
     justify-content: space-between;
     gap: 12px;
     flex-wrap: wrap;
+}
+
+@media (max-width: 860px) {
+    .hero__grid,
+    .grid-3,
+    .grid-2 {
+        grid-template-columns: 1fr;
+    }
+
+    .ip-banner .container {
+        flex-wrap: wrap;
+    }
 }
