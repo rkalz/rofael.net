@@ -144,6 +144,33 @@ a:hover {
     font-size: 0.92rem;
 }
 
+.header-connection {
+    display: flex;
+    flex-direction: column;
+    gap: 0.25rem;
+    font-size: 0.875rem;
+    margin-left: 1.5rem;
+}
+
+.connection-label {
+    color: var(--muted);
+    font-size: 0.75rem;
+}
+
+.connection-info {
+    display: flex;
+    align-items: center;
+    gap: 0.5rem;
+}
+
+.connection-ip {
+    font-family:
+        ui-monospace, "SF Mono", "Monaco", "Cascadia Code", "Roboto Mono",
+        monospace;
+    font-size: 0.8125rem;
+    color: var(--muted);
+}
+
 .nav {
     display: flex;
     gap: 14px;
@@ -178,6 +205,11 @@ a:hover {
 @media (max-width: 860px) {
     .hero__grid {
         grid-template-columns: 1fr;
+    }
+
+    .header-connection {
+        margin-left: 0;
+        margin-top: 0.5rem;
     }
 }
 
@@ -332,6 +364,24 @@ dd {
     background: color-mix(in oklab, var(--ok) 18%, transparent);
 }
 
+.pill--ipv4 {
+    background: #60a5fa;
+    color: white;
+    border-color: #60a5fa;
+}
+
+.pill--ipv6 {
+    background: #34d399;
+    color: white;
+    border-color: #34d399;
+}
+
+.pill--checking {
+    background: #d1d5db;
+    color: #374151;
+    border-color: #d1d5db;
+}
+
 .mono {
     overflow-x: auto;
     background: color-mix(in oklab, var(--panel) 88%, transparent);
@@ -357,27 +407,4 @@ dd {
     justify-content: space-between;
     gap: 12px;
     flex-wrap: wrap;
-}
-
-.connection-status {
-    margin-top: 1rem;
-    padding: 0.75rem;
-    background: var(--surface, #f5f5f5);
-    border-radius: 0.5rem;
-    font-size: 0.9rem;
-}
-
-.pill--ipv4 {
-    background: #60a5fa;
-    color: white;
-}
-
-.pill--ipv6 {
-    background: #34d399;
-    color: white;
-}
-
-.pill--checking {
-    background: #d1d5db;
-    color: #374151;
 }

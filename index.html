@@ -29,6 +29,16 @@
                     </div>
                 </div>
 
+                <div class="header-connection">
+                    <div class="connection-label">Your connection:</div>
+                    <div class="connection-info">
+                        <span id="connection-type" class="pill pill--checking"
+                            >Checking...</span
+                        >
+                        <span id="connection-ip" class="connection-ip">—</span>
+                    </div>
+                </div>
+
                 <nav class="nav" aria-label="Primary">
                     <a href="#about">About</a>
                     <a href="#routing">Routing</a>
@@ -97,15 +107,6 @@
                                 >
                             </li>
                         </ul>
-
-                        <div class="connection-status">
-                            <strong>Your connection:</strong>
-                            <span
-                                id="connection-type"
-                                class="pill pill--checking"
-                                >Checking...</span
-                            >
-                        </div>
                     </div>
 
                     <aside class="card">
@@ -503,22 +504,27 @@ Rofnet (AS402164)
 
             // Detect IPv4 vs IPv6 connection
             async function detectConnectionType() {
-                const indicator = document.getElementById("connection-type");
+                const typeIndicator =
+                    document.getElementById("connection-type");
+                const ipIndicator = document.getElementById("connection-ip");
 
                 try {
                     const response = await fetch("/api/ip-version");
                     const data = await response.json();
 
                     if (data.version === "ipv6") {
-                        indicator.textContent = "IPv6";
-                        indicator.className = "pill pill--ipv6";
+                        typeIndicator.textContent = "IPv6";
+                        typeIndicator.className = "pill pill--ipv6";
                     } else {
-                        indicator.textContent = "IPv4";
-                        indicator.className = "pill pill--ipv4";
+                        typeIndicator.textContent = "IPv4";
+                        typeIndicator.className = "pill pill--ipv4";
                     }
+
+                    ipIndicator.textContent = data.ip;
                 } catch (e) {
-                    indicator.textContent = "Error";
-                    indicator.className = "pill pill--checking";
+                    typeIndicator.textContent = "Error";
+                    typeIndicator.className = "pill pill--checking";
+                    ipIndicator.textContent = "—";
                 }
             }
 
