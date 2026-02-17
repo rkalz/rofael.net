@@ -22,7 +22,7 @@
         <header class="site-header">
             <div class="container">
                 <div class="brand">
-                    <div class="brand__mark" aria-hidden="true">AS</div>
+                    <div class="brand__mark" aria-hidden="true">RA</div>
                     <div class="brand__text">
                         <div class="brand__title">Rofnet</div>
                         <div class="brand__subtitle">AS402164</div>
@@ -97,6 +97,15 @@
                                 >
                             </li>
                         </ul>
+
+                        <div class="connection-status">
+                            <strong>Your connection:</strong>
+                            <span
+                                id="connection-type"
+                                class="pill pill--checking"
+                                >Checking...</span
+                            >
+                        </div>
                     </div>
 
                     <aside class="card">
@@ -491,6 +500,29 @@ Rofnet (AS402164)
             document.getElementById("year").textContent = String(
                 new Date().getFullYear(),
             );
+
+            // Detect IPv4 vs IPv6 connection
+            async function detectConnectionType() {
+                const indicator = document.getElementById("connection-type");
+
+                try {
+                    const response = await fetch("/api/ip-version");
+                    const data = await response.json();
+
+                    if (data.version === "ipv6") {
+                        indicator.textContent = "IPv6";
+                        indicator.className = "pill pill--ipv6";
+                    } else {
+                        indicator.textContent = "IPv4";
+                        indicator.className = "pill pill--ipv4";
+                    }
+                } catch (e) {
+                    indicator.textContent = "Error";
+                    indicator.className = "pill pill--checking";
+                }
+            }
+
+            detectConnectionType();
         </script>
     </body>
 </html>
