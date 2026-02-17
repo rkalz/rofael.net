@@ -1,0 +1,89 @@
+name: Deploy to Home Server
+
+on:
+  push:
+    branches: [main]
+  workflow_dispatch: # Allows manual trigger from GitHub UI
+
+jobs:
+  deploy:
+    runs-on: self-hosted
+
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v4
+
+      - name: Check what files changed
+        id: changes
+        run: |
+          echo "Checking for changed files..."
+          if [ "${{ github.event_name }}" == "workflow_dispatch" ]; then
+            echo "Manual trigger - deploying all"
+            echo "files=all" >> $GITHUB_OUTPUT
+          else
+            CHANGED_FILES=$(git diff --name-only HEAD~1 2>/dev/null || echo "all")
+            echo "Changed files: $CHANGED_FILES"
+            echo "files=$CHANGED_FILES" >> $GITHUB_OUTPUT
+          fi
+
+      - name: Update nginx config if changed
+        if: contains(steps.changes.outputs.files, 'nginx/') || contains(steps.changes.outputs.files, 'all')
+        run: |
+          echo "Nginx config changed, updating..."
+          sudo cp nginx/rofael.net.conf /etc/nginx/sites-available/rofael.net
+          sudo nginx -t
+          sudo nginx -s reload
+          echo "✅ Nginx reloaded"
+
+      - name: Build Docker image
+        run: |
+          echo "Building Docker image..."
+          docker build -t mysite:latest .
+          echo "✅ Docker image built"
+
+      - name: Stop old container
+        run: |
+          echo "Stopping old container..."
+          docker stop mysite-container 2>/dev/null || true
+          docker rm mysite-container 2>/dev/null || true
+          echo "✅ Old container stopped"
+
+      - name: Start new container
+        run: |
+          echo "Starting new container..."
+          docker run -d \
+            --name mysite-container \
+            --restart unless-stopped \
+            -p 127.0.0.1:8081:80 \
+            mysite:latest
+          echo "✅ Container started"
+
+      - name: Verify deployment
+        run: |
+          echo "Waiting for container to start..."
+          sleep 3
+          if docker ps | grep -q mysite-container; then
+            echo "✅ Deployment successful!"
+            docker ps | grep mysite-container
+          else
+            echo "❌ Deployment failed!"
+            docker logs mysite-container
+            exit 1
+          fi
+
+      - name: Cleanup old images
+        run: |
+          echo "Cleaning up old Docker images..."
+          docker image prune -f
+          echo "✅ Cleanup complete"
+
+      - name: Show deployment summary
+        if: always()
+        run: |
+          echo "=== Deployment Summary ==="
+          echo "Repository: ${{ github.repository }}"
+          echo "Branch: ${{ github.ref_name }}"
+          echo "Commit: ${{ github.sha }}"
+          echo "Triggered by: ${{ github.actor }}"
+          echo "Status: ${{ job.status }}"
+          echo "======================="
