@@ -56,6 +56,14 @@ jobs:
             echo "✅ Symlink already exists"
           fi
 
+      - name: Capture old image id (for cleanup)
+        id: oldimage
+        run: |
+          set -euo pipefail
+          OLD_IMAGE_ID=$(docker inspect -f '{{.Image}}' rofael-net-container 2>/dev/null || true)
+          echo "old_image_id=$OLD_IMAGE_ID" >> "$GITHUB_OUTPUT"
+          echo "Old image id: $OLD_IMAGE_ID"
+
       - name: Build Docker image
         run: |
           echo "Building Docker image..."
@@ -142,9 +150,24 @@ jobs:
             exit 1
           fi
 
-      - name: Cleanup old images
+      - name: Delete old image after successful deploy
+        if: success()
         run: |
-          echo "Cleaning up old Docker images..."
+          set -euo pipefail
+          OLD_IMAGE_ID='${{ steps.oldimage.outputs.old_image_id }}'
+
+          if [ -n "$OLD_IMAGE_ID" ]; then
+            echo "Deleting old image: $OLD_IMAGE_ID"
+            docker rmi -f "$OLD_IMAGE_ID" || true
+            echo "✅ Old image deleted"
+          else
+            echo "No old image to delete (container didn't exist)."
+          fi
+
+      - name: Cleanup dangling images
+        if: success()
+        run: |
+          echo "Cleaning up dangling Docker images..."
           docker image prune -f
           echo "✅ Cleanup complete"
 
