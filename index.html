@@ -69,13 +69,10 @@
                         <ul class="quick-facts" aria-label="Quick facts">
                             <li><strong>ASN:</strong> 402164</li>
                             <li><strong>IPv6:</strong> 2620:5a:d000::/48</li>
+                            <li><strong>IPv4:</strong> 23.144.84.0/24</li>
                             <li>
                                 <strong>Upstream transits:</strong> AS21700 —
                                 NYC, AS20473 — NJ
-                            </li>
-                            <li>
-                                <strong>IPv4:</strong>
-                                <span class="muted">Pending ARIN waitlist</span>
                             </li>
                             <li>
                                 <strong>PeeringDB:</strong>
@@ -88,23 +85,37 @@
                                 </a>
                             </li>
                             <li>
-                                <strong>RPKI:</strong>
+                                <strong>RPKI (RIPEstat):</strong>
                                 <a
                                     href="https://stat.ripe.net/2620:5a:d000::/48"
                                     rel="noopener noreferrer"
                                     target="_blank"
                                 >
-                                    Visible on RIPEstat
+                                    (v6)
+                                </a>
+                                <a
+                                    href="https://stat.ripe.net/23.144.84.0/24"
+                                    rel="noopener noreferrer"
+                                    target="_blank"
+                                >
+                                    (v4)
                                 </a>
                             </li>
                             <li>
-                                <strong>IRR:</strong>
+                                <strong>IRR (Route Objects):</strong>
                                 <a
                                     href="https://irrexplorer.nlnog.net/prefix/2620:5a:d000::/48"
                                     rel="noopener noreferrer"
                                     target="_blank"
                                 >
-                                    View route objects
+                                    (v6)
+                                </a>
+                                <a
+                                    href="https://irrexplorer.nlnog.net/prefix/23.144.84.0/24"
+                                    rel="noopener noreferrer"
+                                    target="_blank"
+                                >
+                                    (v4)
                                 </a>
                             </li>
                         </ul>
@@ -236,7 +247,7 @@
                                 <li>
                                     <strong>IPv6:</strong> 2620:5a:d000::/48
                                 </li>
-                                <li><strong>IPv4:</strong> none</li>
+                                <li><strong>IPv4:</strong> 23.144.84.0/24</li>
                             </ul>
                         </div>
                     </div>
@@ -280,7 +291,7 @@
     - AS21700 (Neptune Networks) — New York, NY
     - AS20473 (Vultr) — Piscataway, NJ
   - IPv6: 2620:5a:d000::/48
-  - IPv4: none
+  - IPv4: 23.144.84.0/24
   - Anycast: yes (multi-homed announcements)
   - RPKI: enabled (ROAs published)
   - IRR: route objects present (ARIN IRR) — see IRR Explorer
@@ -302,13 +313,23 @@
                             <h3>RPKI (ROAs)</h3>
                             <ul class="list">
                                 <li>
-                                    RIPEstat (prefix):
+                                    RIPEstat (v6):
                                     <a
                                         href="https://stat.ripe.net/2620:5a:d000::/48"
                                         rel="noopener noreferrer"
                                         target="_blank"
                                     >
                                         2620:5a:d000::/48
+                                    </a>
+                                </li>
+                                <li>
+                                    RIPEstat (v6):
+                                    <a
+                                        href="https://stat.ripe.net/23.144.84.0/24"
+                                        rel="noopener noreferrer"
+                                        target="_blank"
+                                    >
+                                        23.144.84.0/24
                                     </a>
                                 </li>
                                 <li>
@@ -328,13 +349,23 @@
                             <h3>IRR (route/route6 objects)</h3>
                             <ul class="list">
                                 <li>
-                                    IRR Explorer (prefix):
+                                    IRR Explorer (v6):
                                     <a
                                         href="https://irrexplorer.nlnog.net/prefix/2620:5a:d000::/48"
                                         rel="noopener noreferrer"
                                         target="_blank"
                                     >
                                         2620:5a:d000::/48
+                                    </a>
+                                </li>
+                                <li>
+                                    IRR Explorer (v4):
+                                    <a
+                                        href="https://irrexplorer.nlnog.net/prefix/23.144.84.0/24"
+                                        rel="noopener noreferrer"
+                                        target="_blank"
+                                    >
+                                        23.144.84.0/24
                                     </a>
                                 </li>
                                 <li>
@@ -349,9 +380,15 @@
                                 </li>
                                 <li class="muted">
                                     Raw ARIN whois (port 43):
+                                    <br />
                                     <code
                                         >whois -h rr.arin.net
                                         2620:5a:d000::/48</code
+                                    >
+                                    <br />
+                                    <code
+                                        >whois -h rr.arin.net
+                                        23.144.84.0/24</code
                                     >
                                 </li>
                             </ul>
@@ -372,13 +409,23 @@
                                 </a>
                             </li>
                             <li>
-                                Prefix registration:
+                                v6 registration:
                                 <a
                                     href="https://rdap.arin.net/registry/ip/2620:5a:d000::/48"
                                     rel="noopener noreferrer"
                                     target="_blank"
                                 >
                                     rdap.arin.net/registry/ip/2620:5a:d000::/48
+                                </a>
+                            </li>
+                            <li>
+                                v4 registration:
+                                <a
+                                    href="https://rdap.arin.net/registry/ip/2620:5a:d000::/48"
+                                    rel="noopener noreferrer"
+                                    target="_blank"
+                                >
+                                    rdap.arin.net/registry/ip/23.144.84.0/24
                                 </a>
                             </li>
                         </ul>
