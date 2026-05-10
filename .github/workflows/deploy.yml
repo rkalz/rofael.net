@@ -95,6 +95,7 @@ jobs:
             --name ${{ steps.ports.outputs.new_name }} \
             --restart unless-stopped \
             -p 127.0.0.1:${{ steps.ports.outputs.new_port }}:80 \
+            --label com.centurylinklabs.watchtower.enable=false \
             rofael-net:latest
           echo "✅ New container started"
 
